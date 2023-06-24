@@ -4,42 +4,27 @@ using UnityEngine;
 
 public class LadderTriggerBehavior : MonoBehaviour
 {
-    [SerializeField] private AudioManager _audioManager;
     [SerializeField] private Transform _otherEndOfLadder;
-    [SerializeField] private bool _isReadyToClimb;
+    [SerializeField] private bool _isReadyToClimb, _isClimbing;
     private Transform _playerTransform;
-
+    private Animator _animator;
+    private PlayerBehavior _playerBehavior;
 
     private void Start()
     {
-        _audioManager = FindObjectOfType<AudioManager>();
         _playerTransform = GameObject.Find("PlayerBase").GetComponent<Transform>();
+        _animator = GameObject.Find("Character_Explorer_Female_01").GetComponent<Animator>();
+        //_animator.SetBool("Climb", true);
+        _playerBehavior = FindObjectOfType<PlayerBehavior>();
     }
-    private void Update()
+    
+    private void OnTriggerStay(Collider other)
     {
-        if (_isReadyToClimb)
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                _playerTransform.gameObject.SetActive(false);
-                _playerTransform.position = _otherEndOfLadder.position;
-                _audioManager.PlayAudioOfChoice(2);
-                _playerTransform.gameObject.SetActive(true);
-            }
-    }
-
-
-
-
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("What the what?");
-        _isReadyToClimb = true;
+        _playerBehavior._climbing = true;
     }
     private void OnTriggerExit(Collider other)
     {
-        if(other.tag == "Player")
-            _isReadyToClimb= false;
+        _playerBehavior._climbing = false;
+
     }
 }
