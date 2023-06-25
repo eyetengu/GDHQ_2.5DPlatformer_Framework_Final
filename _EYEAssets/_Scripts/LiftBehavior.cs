@@ -13,7 +13,7 @@ public class LiftBehavior : MonoBehaviour
     {
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (_pauseLift == false)
         {

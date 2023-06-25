@@ -32,12 +32,36 @@ public class PlayerBehavior : MonoBehaviour
     void Update()
     {
         if (_climbing == true)
+        {
+            ClimbingMovement();
             Debug.Log("Climbing");
+        }
+
         else
+        {
+            PlayerMovement();
             Debug.Log("Not Climbing");
             //ClimbLadder();
+        }
+    }
 
-        PlayerMovement();
+    void ClimbingMovement()
+    {
+        float verticalInput = Input.GetAxisRaw("Vertical");
+
+        Vector3 direction = new Vector3(0, verticalInput, 0);
+        Vector3 velocity = direction * _speed;
+
+        if(verticalInput !=0)
+        {
+            _animator.Play("ClimbUp");
+
+            transform.Translate(0, 1.0f * Time.deltaTime, 0);
+        }
+        else
+        {
+            _animator.Play("ClimbEnter");
+        }
     }
 
     void PlayerMovement()
@@ -61,6 +85,7 @@ public class PlayerBehavior : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _audioManager.PlayAudioOfChoice(1);
+                _animator.SetTrigger("Jump");
 
                 _yVelocity = _jumpHeight;
                 _canDoubleJump = true;
